@@ -70,7 +70,7 @@ class RSA:
         raise NotImplementedError()
 
 if __name__ == '__main__':
-    key_bits = BB84.generate_key(5000)
+    key_bits = BB84.generate_key(1000)
     key_qubits, basis_bits = BB84.encode_key_qubits(key_bits)
     quantumChannel = QuantumChannel(1)
     # print(key_bits) # debug

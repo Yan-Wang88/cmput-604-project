@@ -1,5 +1,7 @@
 from qiskit import QuantumCircuit
 from qiskit import Aer
+from qiskit.circuit.classicalregister import ClassicalRegister
+from qiskit.circuit.quantumregister import AncillaRegister, QuantumRegister
 from bitstring import Bits
 import math
 import numpy as np
@@ -41,21 +43,53 @@ def quantum_random_choice(items, dist):
 
     return items[0]
 
-if __name__ == '__main__':
-    i0 = 0
-    i1 = 0
-    i2 = 0
-    dist = [0.7, 0.1, 0.2]
-    for _ in range(10000):
+def bit_flip_recovery_circ(name):
+    qr = QuantumRegister(3, name)
+    ar = AncillaRegister(2, name+'_error_code_ar')
+    cr = ClassicalRegister(2, name+'_error_code_cr')
+    circ = QuantumCircuit(qr, ar, cr)
+    circ.cnot(0, 3)
+    circ.cnot(1, 3)
+    circ.cnot(1, 4)
+    circ.cnot(2, 4)
+    circ.cnot(3, 0)
+    circ.cnot(4, 2)
+    circ.ccx(3, 4, 0)
+    circ.ccx(3, 4, 1)
+    circ.ccx(3, 4, 2)
 
-        choice = quantum_random_choice([0, 1, 2], dist)
-        if choice == 0:
-            i0 += 1
-        elif choice == 1:
-            i1 += 1
+    # unentangle the code qubits
+    circ.cnot(0, 2)
+    circ.cnot(0, 1)
+    circ.measure([3, 4], [0, 1])
+
+    return circ
+
+def bit_flip_encode_circ(name):
+    qr = QuantumRegister(3, name)
+    circ = QuantumCircuit(qr)
+    circ.cnot(0, 1)
+    circ.cnot(0, 2)
+    return circ
+
+if __name__ == '__main__':
+    dist = np.array([1.]*3)
+    dist /= float(len(dist))
+    x = 0
+    y = 0
+    z = 0
+    for _ in range(1000):
+        error = quantum_random_choice(['x', 'y', 'z'], dist)
+        
+        if error == 'x':
+            x += 1
+        elif error == 'y':
+            y += 1
+        elif error == 'z':
+            z += 1
         else:
-            i2 += 1
+            raise NotImplementedError()
     
-    print('i0:', i0)
-    print('i1:', i1)
-    print('i2:', i2)
+    print('x:',x)
+    print('y:',y)
+    print('z:',z)
