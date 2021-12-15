@@ -5,7 +5,6 @@ import utility
 from qiskit import QuantumCircuit
 from qiskit import Aer
 from qiskit.quantum_info import Statevector
-import os
 
 class BB84:
     def __init__(self) -> None:
@@ -213,12 +212,3 @@ class BB84:
 class RSA:
     def encrypt(file_bits, key_bits):
         raise NotImplementedError()
-
-if __name__ == '__main__':
-    cipher = BB84()
-
-    _, _, files = next(os.walk('test_files'))
-    for filename in files:
-        decrypted_file_bits = cipher.send_file(filename, 1000)
-        with open(filename[:-4]+'_received'+filename[-4:], 'wb') as f:
-            decrypted_file_bits.tofile(f)
