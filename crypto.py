@@ -65,7 +65,7 @@ class BB84:
             self._quantum_channel.send(qubit)
             received += [self._quantum_channel.receive()]
 
-        eveasdropper_prob = 0.6
+        eveasdropper_prob = 0.5
         eveasdropper = utility.quantum_bernoulli_bit(eveasdropper_prob)
         if eveasdropper:
             print('Eve tries to intercept key bits...')
@@ -216,6 +216,6 @@ class RSA:
 if __name__ == '__main__':
     cipher = BB84()
     filename = 'test_files/short_text.txt'
-    decrypted_file_bits = cipher.send_file(filename, 100)
+    decrypted_file_bits = cipher.send_file(filename, 1000)
     with open(filename[:-4]+'_received'+filename[-4:], 'wb') as f:
         decrypted_file_bits.tofile(f)
