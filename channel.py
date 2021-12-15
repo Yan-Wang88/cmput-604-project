@@ -7,27 +7,8 @@ import utility
 import numpy as np
 from qiskit.quantum_info import Statevector
 
-class ClassicalChannel:
-    def __init__(self) -> None:
-        self._message = None
-
-    def send(self, message_bits):
-        self._message = message_bits
-    
-    def receive(self):
-        assert self._message is not None
-        message = self._message
-        self._message = None
-
-        return message
-    
-    def sniff(self):
-        assert self._message is not None
-
-        return self._message
-
 class QuantumChannel:
-    def __init__(self, error_rate) -> None:
+    def __init__(self, error_rate=0.0) -> None:
         self._error_rate = error_rate
         self._state_vector = None
 
@@ -58,13 +39,13 @@ class QuantumChannel:
             dist /= float(len(dist))
             error = utility.quantum_random_choice(['x', 'y', 'z'], dist)
             if error == 'x':
-                # print('apply x to:', error_bit) # debug
+                # print('apply x to:', error_bit)
                 circ.x(error_bit)
             elif error == 'y':
-                # print('apply y to:', error_bit) # debug
+                # print('apply y to:', error_bit)
                 circ.y(error_bit)
             elif error == 'z':
-                # print('apply z to:', error_bit) # debug
+                # print('apply z to:', error_bit)
                 circ.z(error_bit)
             else:
                 raise NotImplementedError()
@@ -110,11 +91,11 @@ class QuantumChannel:
         full_statevector = result.get_statevector()
         c_error_code, b_error_code, a_error_code, phase_error_code = [int(code, base=2) for code in (list(result.get_counts())[0]).split()]
         error_code = (phase_error_code << 9) + (a_error_code << 11) + (b_error_code << 13) + (c_error_code << 15)
-        indices = [error_code, error_code + 1]
+        indices = [error_code, error_code + 1] # error codes in ancillas changes the index of states
 
         return full_statevector[indices]
 
-    def send9(self, state_vector):
+    def send_3_code(self, state_vector):
         # entangle with 2 other qubits to correct X error
         circ = QuantumCircuit(3)
         circ.initialize(state_vector, [0])
@@ -132,7 +113,7 @@ class QuantumChannel:
 
         self._state_vector = Statevector(circ)
 
-    def receive9(self):
+    def receive_3_code(self):
         circ = QuantumCircuit(5, 2)
         circ.initialize(self._state_vector, [0, 1, 2])
         self._state_vector = None # non-clone theorem
