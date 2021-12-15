@@ -16,7 +16,8 @@ def main():
         cipher = BB84()
 
     _, _, files = next(os.walk(args.test_file_dir))
-    for filename in files.reverse:
+    files.reverse()
+    for filename in files:
         print('processing:', filename)
         decrypted_file_bits = cipher.send_file(args.test_file_dir+filename, args.approx_key_length)
         with open(args.received_file_dir+filename[:-4]+'_received'+filename[-4:], 'wb') as f:
