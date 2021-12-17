@@ -12,13 +12,13 @@ class QuantumChannel:
         self._error_rate = error_rate
         self._state_vector = None
 
-    def send(self, state_vector):
+    def send_plain(self, state_vector):
         self._state_vector = state_vector
 
-    def receive(self):
+    def receive_plain(self):
         return self._state_vector
 
-    def send_9_code(self, state_vector):
+    def send(self, state_vector):
         qr_a = QuantumRegister(3, 'a')
         qr_b = QuantumRegister(3, 'b')
         qr_c = QuantumRegister(3, 'c')
@@ -59,7 +59,7 @@ class QuantumChannel:
         # circ.draw('mpl') # debug
         self._state_vector = Statevector(circ)
 
-    def receive_9_code(self):
+    def receive(self):
         qr_a = QuantumRegister(3, 'a')
         qr_b = QuantumRegister(3, 'b')
         qr_c = QuantumRegister(3, 'c')
