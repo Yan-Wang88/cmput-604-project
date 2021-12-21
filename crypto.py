@@ -208,7 +208,3 @@ class BB84:
         self._alice_sample_bits_vs_bob_sample_bits_log.close()
         self._alice_basis_vs_eve_basis_log.close()
         self._alice_key_vs_eve_key_log.close()
-
-class RSA:
-    def encrypt(file_bits, key_bits):
-        raise NotImplementedError()

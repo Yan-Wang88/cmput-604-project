@@ -7,13 +7,9 @@ def main():
     parser.add_argument('--test_file_dir', default='test_files/', type=str)
     parser.add_argument('--received_file_dir', default='received_files/', type=str)
     parser.add_argument('--approx_key_length', default=1000, type=int)
-    parser.add_argument('--rsa', action='store_true')
     args = parser.parse_args()
     
-    if args.rsa:
-        cipher = RSA
-    else:
-        cipher = BB84()
+    cipher = BB84()
 
     _, _, files = next(os.walk(args.test_file_dir))
     files.reverse()
