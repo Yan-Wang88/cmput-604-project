@@ -1,4 +1,4 @@
-from crypto import BB84, RSA
+from crypto import BB84
 import argparse
 import os
 
