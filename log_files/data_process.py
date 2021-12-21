@@ -15,8 +15,8 @@ with open('log_files/alice_basis_vs_bob_basis.log', 'r') as f:
         data.append(d)
 
 interval = st.t.interval(alpha=0.95, df=len(data)-1, loc=np.mean(data), scale=st.sem(data)) 
-# print('mean:', np.mean(data))
-# print('95 interval:', interval)
+print('mean:', np.mean(data))
+print('95 interval:', interval)
 
 # get alice key vs bob key
 data_t = []
